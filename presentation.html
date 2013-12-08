@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<title>Selenium</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="stylesheet" href="reveal.js-2.6.1/css/reveal.min.css">
+<link rel="stylesheet" href="reveal.js-2.6.1/css/theme/beige.css" id="theme">
+
+<!-- For syntax highlighting -->
+<link rel="stylesheet" href="reveal.js-2.6.1/lib/css/zenburn.css">
+
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+</head>
+<body>
+
+<div class="reveal">
+    
+	<div class="slides">
+		<section>
+			<h1>Selenium</h1>
+			<h3>Automated Acceptance Testing</h3>
+			<p>
+				<small>Created by <a href="mailto:djohnson@sapient.com">Daniel Johnson</a></small>
+			</p>
+		</section>
+        
+		<section>
+			<h2>Who am I?</h2>
+			<ul>
+                <li>Manager Interactive Development in Boston</li>
+                <li>Started in September</li>
+                <li>Working at Omgeo</li>
+                <li>Enjoy building things with JavaScript, Ruby, PHP, Python, etc.)</li>
+                <li>Spent the past two years working as a tech lead for PureTech Ventures (they create health/IT companies)</li>
+            </ul>
+		</section>
+        
+		<section>
+            <section>
+			    <h2>The Plan</h2>
+    			<ul>
+                    <li>What is acceptance testing compared to unit, integration, and functional testing</li>
+                    <li>Why automate this type of testing</li>
+                    <li>What is Selenium and how does it compare to other alternatives</li>
+                    <li>How to install and configure Selenium on a Mac and PC</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>The Plan Cont.</h2>
+    			<ul>
+                    <li>Selenium "hello world" in Chrome and Firefox</li>
+                    <li>How it works</li>
+                    <li>Using Selenium with Mocha to write tests</li>
+                    <li>A walk through of the application and the Selenium tests that go along with each feature
+                        <ul>
+                            <li>XPath basics</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>The Plan Cont.</h2>
+    			<ul>
+                    <li>How to handle ajax and other async processes</li>
+                    <li>Open discussion and Q&amp;A</li>
+                </ul>
+            </section>
+		</section>
+        
+		<section>
+            <section>
+			    <h2>Unit Tests</h2>
+    			<ul>
+                    <li>Tests a single small unit of code</li>
+                    <li>Can run in isolation</li>
+                    <li>Often a function or method of a class</li>
+                    <li>Does not use any real components, but instead mocks or stubs if needed</li>
+                    <li>Is usually what's referred to when talking about code coverage metrics</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Integration Tests</h2>
+    			<ul>
+                    <li>Tests that multiple units, or modules of an application work together</li>
+                    <li>Can be anything from a couple functions, to something that requires a real resource, to a full system wide test</li>
+                    <li>Often used to test the interaction between applications layers (e.g. core, services, UI)
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Functional Tests</h2>
+    			<ul>
+                    <li>Used by the development and/or QA team to check that features of the application match up to the spec</li>
+                    <li>Often match up to agile or BDD stories</li>
+                    <li>Tests the functionality not using a real browser, but often what's know as a headless browser</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Acceptance Tests</h2>
+    			<ul>
+                    <li>Used by the QA team and/or the client to validate that features are working correctly</li>
+                    <li>Often match up to agile or BDD stories</li>
+                    <li>Done in a production like environment with a real browser(s)</li>
+                    <li>Is usually one of the last steps of doneness in a story</li>
+                </ul>
+            </section>
+		</section>
+        
+		<section>
+			<h2>Why Automate?</h2>
+			
+			<ul>
+                <li>Why not?</li>
+            </ul>
+		</section>
+        
+        <section>
+            <section>
+                <h2>What is Selenium?</h2>
+            
+                <blockquote cite="http://www.seleniumhq.org">"Selenium automates browsers. That's it. What you do with that power is entirely up to you."</blockquote>
+                
+                <br />
+                
+                <p>Started in 2004 at <a href="http://www.thoughtworks.com">http://www.thoughtworks.com</a></p>
+                
+                <br />
+                
+                <p><a href="http://www.seleniumhq.org/projects">http://www.seleniumhq.org/projects</a></p>
+            </section>
+            
+            <section>
+                <h2>Alternatives</h2>
+            
+                <ul>
+                    <li>Real Browsers
+                        <ul>
+                            <li><a href="http://sahi.co.in">Sahi</a></li>
+                            <li><a href="http://www.borland.com/products/silktest">Silk</a></li>
+                            
+                        </ul>
+                    </li>
+                    <li>Headless Browsers
+                        <ul>
+                            <li><a href="http://phantomjs.org">PhantomJS (Webkit)</a>
+                                <ul>
+                                    <li><a href="http://casperjs.org">CasperJS</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="http://zombie.labnotes.org">Zombie.js</a> (not really headless, uses V8, JSDOM, sizzle, etc</li>
+                            <li><a href="http://slimerjs.org">SlimerJS (Gecko)</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </section>
+        
+        <section>
+            <h2>How to install and configure Selenium</h2>
+            
+            <ol>
+                <li>npm install selenium-webdriver</li>
+                <li>Download latest chrome driver from http://chromedriver.storage.googleapis.com/index.html?path=2.7/</li>
+                <li>Move to /usr/local/ and then make sure this directory is in your system path</li>
+                <li>If you just want chrome, you're done, otherwise if you want other browsers (FF or IE) you need <a href="https://code.google.com/p/selenium/downloads/list">selenium-server-standalone-2.37.0.jar</a></li>
+                <li>Add the jar to your system path as SELENIUM_SERVER_JAR</li>
+                <li>java -jar /usr/local/selenium-server-standalone-2.37.0.jar and then run your tests</li>
+            </ol>  
+        </section>
+
+		<section>
+			<h2>Hello Google!</h2>
+			<pre><code data-trim contenteditable>
+                var webdriver = require('selenium-webdriver');
+
+var driver = new webdriver.Builder().
+  withCapabilities(webdriver.Capabilities.chrome()).
+  // withCapabilities(webdriver.Capabilities.firefox()).
+  build();
+
+driver.get('http://www.google.com');
+driver.findElement(webdriver.By.name('q')).sendKeys('webdriver');
+driver.findElement(webdriver.By.name('btnG')).click();
+driver.wait(function() {
+  return driver.getTitle().then(function(title) {
+    return title === 'webdriver - Google Search';
+  });
+}, 1000);
+
+driver.quit();
+			</code></pre>
+		</section>
+        
+        <section>
+            <section>
+                <h2>The Details</h2>
+            
+                <ul>
+                    <li>Almost everything in Selenium returns a promise, and you can register observers using the then() function</li>
+                    <li><q cite="https://code.google.com/p/selenium/wiki/WebDriverJs#Writing_Tests">The promise manager maintains a queue of scheduled tasks, executing each once the one before it in the queue is finished</q></li>
+                    <li>Say what?</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>The Details Cont.</h2>
+            
+    			<pre><code data-trim contenteditable>
+$('myForm').on('submit', function(e) {
+    doSomething(); // execute after form submits
+});
+    			</code></pre>
+                
+    			<pre><code data-trim contenteditable>
+$('myForm').submit();
+
+doSomething(); // execute after form submits
+    			</code></pre>
+            </section>
+            
+            <section>
+                <h2>The Details Cont.</h2>
+            
+    			<pre><code data-trim contenteditable>
+driver.get('http://127.0.0.1/~djohn3/selenium-test/home.html').then(function() {
+    return driver.findElement(webdriver.By.name('color')).click();
+}).then(function() {
+    return driver.findElement(webdriver.By.xpath('//select[@name="color"]/option[@value="red"]')).click();
+}).then(function() {
+    driver.findElement(webdriver.By.id('colorForm')).submit();
+}).then(function() {
+    return driver.findElement(webdriver.By.id('displayColor')).getText();
+}).then(function(value) {
+    value.should.equal('red');
+});
+    			</code></pre>
+                
+    			<pre><code data-trim contenteditable>
+driver.get('http://127.0.0.1/~djohn3/selenium-test/home.html');
+
+driver.findElement(webdriver.By.name('color')).click();
+
+driver.findElement(webdriver.By.xpath('//select[@name="color"]/option[@value="red"]')).click();
+
+driver.findElement(webdriver.By.id('colorForm')).submit();
+
+driver.findElement(webdriver.By.id('displayColor')).getText().then(function(value) {
+    value.should.equal('red');
+});
+    			</code></pre>
+            </section>
+        </section>
+        
+        <section>
+            <h2>Writing tests with Mocha</h2>
+            
+			<pre><code data-trim contenteditable>
+var webdriver = require('selenium-webdriver'),
+    test = require('selenium-webdriver/testing'),
+    chai = require('chai');
+
+test.describe('Home Page', function() {
+    var driver;
+
+    chai.should();
+
+    test.beforeEach(function() {
+        driver = new webdriver.Builder().
+           withCapabilities(webdriver.Capabilities.chrome()).
+           build();
+    });
+
+    test.it("should go to home page and get page title", function() {
+        driver.get('http://127.0.0.1/~djohn3/selenium-test/home.html');
+
+        driver.getTitle().then(function(title) {
+            title.should.equal('Home');
+        });
+    });
+
+    test.afterEach(function() {
+        driver.quit();
+    });
+});
+			</code></pre>
+        </section>
+        
+        <section>
+            <h2>Application Walkthrough</h2>
+        </section>
+        
+        <section>
+            <section>
+                <h2>XPath Intro</h2>
+            
+                <ul>
+                    <li>XPath is used to navigate through elements and attributes in an XML document via path expressions</li>
+                    <li>It's a part of the W3C XSLT standard</li>
+                    <li>Has over 100 built in functions</li>
+                    <li>XPath is like SQL for XML</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>XPath Intro Cont.</h2>
+                
+                <ul>
+                    <li>There are seven kinds of nodes: element, attribute, text, namespace, processing-instruction, comment, and document nodes</li>
+                    <li>Much like in jQuery, you describe node relationships as parents, children, siblings, ancestors, and descendants</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>XPath Intro Cont.</h2>
+                
+    			<pre><code data-trim contenteditable>
+<products>
+
+    <product type="book">
+        <title>Node.js the Right Way</title>
+        <price>17.00</price>
+    </product>
+    
+    <product type="movie">
+        <title>Ski Patrol</title>
+        <price>19.95</price>
+    </product>
+
+</products>
+    			</code></pre>
+                
+    			<pre><code data-trim contenteditable>
+/products/product (select all product nodes that are direct descendants of products)
+
+//product (selects all product nodes regardless of where they are)
+
+/products/product/title[1] (selects the first title node)
+
+/products/product[@type="book"] (select all product nodes where the title attribute has a value of book)
+
+    			</code></pre>
+            </section>
+        </section>
+        
+		<section>
+			<h1>THE END</h1>
+			<h3>BY Daniel Johnson</h3>
+		</section>
+
+	</div>
+
+</div>
+
+<script src="reveal.js-2.6.1/lib/js/head.min.js"></script>
+<script src="reveal.js-2.6.1/js/reveal.min.js"></script>
+
+<script>
+
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+	controls: true,
+	progress: true,
+	history: true,
+	center: true,
+
+	transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+	// Optional libraries used to extend on reveal.js
+	dependencies: [
+		{ src: 'reveal.js-2.6.1/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+		{ src: 'reveal.js-2.6.1/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+		{ src: 'reveal.js-2.6.1/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+	]
+});
+
+</script>
+
+</body>
+</html>

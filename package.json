@@ -1,0 +1,7 @@
+{
+  "name": "selenium-demo",
+  "version": "0.0.1",
+  "dependencies": {
+    "selenium-webdriver": ">= 2.38.0"
+  }
+}
