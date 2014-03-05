@@ -17,8 +17,6 @@ test.describe('Navigation Tests', function() {
     });
     
     test.it('should navigate from forms page to grid page and then back again', function() {
-
-        
         driver.get('http://127.0.0.1/~djohn3/selenium-demo/forms.html');
         
         driver.takeScreenshot().then(function(data) {
