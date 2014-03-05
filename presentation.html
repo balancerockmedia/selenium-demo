@@ -34,17 +34,6 @@
 		</section>
         
 		<section>
-			<h2>Who am I?</h2>
-			<ul>
-                <li>Manager Interactive Development in Boston</li>
-                <li>Started in September</li>
-                <li>Working at Omgeo</li>
-                <li>Enjoy building things with JavaScript, Ruby, PHP, Python, etc.)</li>
-                <li>Spent the past two years working as a tech lead for PureTech Ventures (they create health/IT companies)</li>
-            </ul>
-		</section>
-        
-		<section>
             <section>
 			    <h2>The Plan</h2>
     			<ul>
@@ -270,12 +259,10 @@ driver.findElement(webdriver.By.id('displayColor')).getText().then(function(valu
 			<pre><code data-trim contenteditable>
 var webdriver = require('selenium-webdriver'),
     test = require('selenium-webdriver/testing'),
-    chai = require('chai');
+    assert = require('assert');
 
 test.describe('Home Page', function() {
     var driver;
-
-    chai.should();
 
     test.beforeEach(function() {
         driver = new webdriver.Builder().
@@ -287,7 +274,7 @@ test.describe('Home Page', function() {
         driver.get('http://127.0.0.1/~djohn3/selenium-test/home.html');
 
         driver.getTitle().then(function(title) {
-            title.should.equal('Home');
+            assert.equal(title, 'Home');
         });
     });
 
@@ -357,7 +344,6 @@ test.describe('Home Page', function() {
         
 		<section>
 			<h1>THE END</h1>
-			<h3>BY Daniel Johnson</h3>
 		</section>
 
 	</div>

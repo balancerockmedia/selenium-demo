@@ -9,7 +9,7 @@ test.describe('Grid Tests', function() {
     
     test.beforeEach(function() {
         driver = new webdriver.Builder().
-           withCapabilities(webdriver.Capabilities.chrome()).
+           withCapabilities(webdriver.Capabilities.phantomjs()).
            build();
     });
     
