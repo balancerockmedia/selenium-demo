@@ -39,7 +39,6 @@ body {
 </div>
 
 <div class="container">
-
     <h2>Grid</h2>
 
     <table class="table table-striped">
@@ -51,10 +50,10 @@ body {
                 <th>Favorite Color</th>
             </tr>
         </thead>
-        
+
         <tbody></tbody>
     </table>
-    
+
     <p><a id="refreshGrid" href="#">Refresh Grid</a></p>
 </div>
 
@@ -64,12 +63,12 @@ body {
 
 var loadPeople = function(file) {
     $('tbody').empty();
-    
+
     // force this ajax call to take at least 1 second
     setTimeout(function() {
         $.getJSON(file).done(function(response) {
             var people = response.people;
-        
+
             for (var i = 0; i < people.length; i++) {
                 var row = '<tr>\
                 <td>'+people[i].id+'</td>\
@@ -77,7 +76,7 @@ var loadPeople = function(file) {
                 <td>'+people[i].lastName+'</td>\
                 <td>'+people[i].favoriteColor+'</td>\
                 </tr>';
-            
+
                 $('tbody').append(row);
             }
         });
@@ -86,10 +85,10 @@ var loadPeople = function(file) {
 
 $(function() {
     loadPeople('grid_data.json');
-    
+
     $('#refreshGrid').on('click', function(e) {
         e.preventDefault();
-        
+
         loadPeople('grid_data2.json');
     });
 });
