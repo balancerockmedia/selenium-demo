@@ -1,94 +1,98 @@
-var webdriver = require('selenium-webdriver');
-var test = require('selenium-webdriver/testing');
+var webdriverio = require('webdriverio');
 var assert = require('assert');
 
-// mocha --reporter spec --timeout 5000
+var client = {};
 
-test.describe('Forms Page', function() {
-    var driver;
+describe('Forms Page', function() {
+    this.timeout(99999999);
 
-    test.beforeEach(function() {
-        driver = new webdriver.Builder().
-           withCapabilities(webdriver.Capabilities.phantomjs()).
-           build();
+    beforeEach(function(done) {
+        client = webdriverio.remote({
+            desiredCapabilities: {
+                browserName: 'phantomjs'
+            }
+        });
+
+        client.init();
+
+        client.setViewportSize({
+            width: 1024,
+            height: 768
+        });
+
+        done();
     });
 
-    test.it('name form should set displayName field', function() {
-        driver.get('http://127.0.0.1/~djohn3/selenium-demo/forms.html');
+    it('name form should set displayName field', function(done) {
+        client
+            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
+ 
+            .setValue('#nameForm input[name="firstName"]', 'Dan')
+            .getValue('#nameForm input[name="firstName"]', function(err, value) {
+                assert(value === 'Dan');
+            })
 
-        var firstNameField = driver.findElement(webdriver.By.name('firstName'));
-        firstNameField.sendKeys('Dan');
-        firstNameField.getAttribute("value").then(function(value) {
-            assert.equal(value, 'Dan');
-        });
+            .setValue('#nameForm input[name="lastName"]', 'Johnson')
+            .getValue('#nameForm input[name="lastName"]', function(err, value) {
+                assert(value === 'Johnson');
+            })
 
-        var lastNameField = driver.findElement(webdriver.By.name('lastName'));
-        lastNameField.sendKeys('Johnson');
-        lastNameField.getAttribute("value").then(function(value) {
-            assert.equal(value, 'Johnson');
-        });
+            .submitForm('#nameForm')
 
-        driver.findElement(webdriver.By.id('nameForm')).submit();
+            .getText('#displayName', function(err, text) {
+                assert.equal(text, 'Dan Johnson');
+            })
 
-        driver.findElement(webdriver.By.id('displayName')).getText().then(function(value) {
-            assert.equal(value, 'Dan Johnson');
-        });
+            .call(done);
     });
 
-    test.it('color form should set displayColor field', function() {
-        driver.get('http://127.0.0.1/~djohn3/selenium-demo/forms.html');
+    it('color form should set displayColor field', function(done) {
+        client
+            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
 
-        driver.findElement(webdriver.By.name('color')).click();
+            .selectByValue('[name="color"]', 'red')
 
-        driver.findElement(webdriver.By.xpath('//select[@name="color"]/option[@value="red"]')).click();
+            .submitForm('#colorForm')
 
-        driver.findElement(webdriver.By.id('colorForm')).submit();
+            .getText('#displayColor', function(err, text) {
+                assert.equal(text, 'red');
+            })
 
-        driver.findElement(webdriver.By.id('displayColor')).getText().then(function(value) {
-            assert.equal(value, 'red');
-        });
+            .call(done);
     });
 
-    test.it('should not allow contact form to be submitted with blank email', function() {
-        driver.get('http://127.0.0.1/~djohn3/selenium-demo/forms.html');
+    it('should not allow contact form to be submitted with blank email', function(done) {
+        client
+            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
 
-        // submit empty form
-        driver.findElement(webdriver.By.id('contactForm')).submit();
+            // submit empty form
+            .submitForm('#contactForm')
 
-        // check that we are still on the forms page
-        driver.getTitle().then(function(title) {
-            assert.equal(title, 'Forms');
-        });
+            // check that we are still on the forms page
+            .getTitle(function(err, title) {
+                assert.equal(title, 'Forms');
+            })
 
-        // another way to check that we are still on the forms page
-        driver.getCurrentUrl().then(function(url) {
-            assert.equal(url, 'http://127.0.0.1/~djohn3/selenium-demo/forms.html');
-        });
+            // pause 3 seconds because the error box animation takes 2 seconds
+            .pause(3000)
 
-        // wait for error box to fade in
-        driver.wait(function() {
-            return driver.executeScript('return $("#formErrors").is(":animated")').then(function(result) {
-                return result === false;
-            });
-        }, 3000); // set to 3 seconds because the animation takes 2 seconds
+            // check that first validation message is present
+            .isExisting('#formErrors .alertContent span:first-child')
 
-        // check that first validation message is present
-        driver.isElementPresent(webdriver.By.css('#formErrors .alertContent span:first-child')).then(function(present) {
-            assert.equal(present, true);
-        });
+            // check length of validation messages
+            .elements('#formErrors .alertContent span', function(err, els) {
+                assert.equal(els.value.length, 1);
+            })
 
-        // check length of validation messages
-        driver.findElements(webdriver.By.xpath('//div[@class="alertContent"]/span')).then(function(elements) {
-            assert.equal(elements.length, 1);
-        });
+            // check content of first validation message
+            .getText('//div[@class="alertContent"]/span[1]', function(err, text) {
+                assert.equal(text, 'Please fill in all required fields!');
+            })
 
-        // check content of first validation message
-        driver.findElement(webdriver.By.xpath('//div[@class="alertContent"]/span[1]')).getText().then(function(value) {
-            assert.equal(value, 'Please fill in all required fields!');
-        });
+            .call(done);
     });
 
-    test.afterEach(function() {
-        driver.quit();
+    afterEach(function(done) {
+        client.end(done);
     });
 });

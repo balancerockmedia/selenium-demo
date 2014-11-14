@@ -1,77 +1,83 @@
-var webdriver = require('selenium-webdriver');
-var test = require('selenium-webdriver/testing');
+var webdriverio = require('webdriverio');
 var assert = require('assert');
 
-// mocha --reporter spec --timeout 5000
+var client = {};
 
-test.describe('Grid Tests', function() {
-    var driver;
+describe('Grid Tests', function() {
+    this.timeout(99999999);
 
-    test.beforeEach(function() {
-        driver = new webdriver.Builder().
-           withCapabilities(webdriver.Capabilities.phantomjs()).
-           build();
+    beforeEach(function(done) {
+        client = webdriverio.remote({
+            desiredCapabilities: {
+                browserName: 'phantomjs'
+            }
+        });
+
+        client.init();
+
+        client.setViewportSize({
+            width: 1024,
+            height: 768
+        });
+
+        done();
     });
 
-    test.it('should load initial grid', function() {
-        driver.get('http://127.0.0.1/~djohn3/selenium-demo/grid.html');
+    it('should load initial grid', function(done) {
+        client
+            .url('http://127.0.0.1/~djohn3/selenium-demo/grid.html')
 
-        driver.getTitle().then(function(title) {
-            assert.equal(title, 'Grid');
-        });
+            .getTitle(function(err, title) {
+                assert.equal(title, 'Grid');
+            })
 
-        // wait for initial grid to load
-        driver.wait(function() {
-            return driver.findElements(webdriver.By.css('tbody tr')).then(function(elements) {
-                return elements.length === 3;
-            });
-        }, 5000);
+            .waitForExist('tbody tr', 5000)
 
-        // test sample data from each row
-        driver.findElement(webdriver.By.css('tbody tr:nth-child(1) td:nth-child(1)')).getText().then(function(text) {
-            assert.equal(text, '1');
-        });
+            .elements('tbody tr', function(err, els) {
+                assert.equal(els.value.length, 3);
+            })
 
-        driver.findElement(webdriver.By.css('tbody tr:nth-child(2) td:nth-child(2)')).getText().then(function(text) {
-            assert.equal(text, 'Ella');
-        });
+            .getText('tbody tr:nth-child(1) td:nth-child(1)', function(err, text) {
+                assert.equal(text, '1');
+            })
 
-        driver.findElement(webdriver.By.css('tbody tr:nth-child(3) td:nth-child(3)')).getText().then(function(text) {
-            assert.equal(text, 'Johnson');
-        });
+            .getText('tbody tr:nth-child(2) td:nth-child(2)', function(err, text) {
+                assert.equal(text, 'Ella');
+            })
+
+            .getText('tbody tr:nth-child(3) td:nth-child(3)', function(err, text) {
+                assert.equal(text, 'Johnson');
+            })
+
+            .call(done);
     });
 
-    test.it('should refresh grid', function() {
-        driver.get('http://127.0.0.1/~djohn3/selenium-demo/grid.html');
+    it('should refresh grid', function(done) {
+        client
+            .url('http://127.0.0.1/~djohn3/selenium-demo/grid.html')
 
-        driver.getTitle().then(function(title) {
-            assert.equal(title, 'Grid');
-        });
+            .getTitle(function(err, title) {
+                assert.equal(title, 'Grid');
+            })
 
-        // wait for initial grid to load
-        driver.wait(function() {
-            return driver.findElements(webdriver.By.css('tbody tr')).then(function(elements) {
-                return elements.length === 3;
-            });
-        }, 5000);
+            .waitForExist('tbody tr', 5000)
 
-        // click refresh link
-        driver.findElement(webdriver.By.id('refreshGrid')).click();
+            .elements('tbody tr', function(err, els) {
+                assert.equal(els.value.length, 3);
+            })
 
-        // wait for new data to be loaded into grid
-        driver.wait(function() {
-            return driver.findElements(webdriver.By.css('tbody tr')).then(function(elements) {
-                return elements.length === 4;
-            });
-        }, 5000);
+            .click('#refreshGrid')
 
-        // test sample data in the row
-        driver.findElement(webdriver.By.css('tbody tr:nth-child(4) td:nth-child(1)')).getText().then(function(text) {
-            assert.equal(text, '4');
-        });
+            .waitForExist('tbody tr:nth-child(4)', 5000)
+
+            .getText('tbody tr:nth-child(4) td:nth-child(1)', function(err, text) {
+                assert.equal(text, '4');
+            })
+
+            .call(done);
     });
 
-    test.afterEach(function() {
-        driver.quit();
+    afterEach(function(done) {
+        client.end(done);
     });
 });
