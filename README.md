@@ -5,4 +5,5 @@ selenium-demo
 
 * Install and run selenium standalone server version 2.43 (2.44 has a bug and will not work with phantomjs)
 * Make sure that chromedriver and phantomjs are in your system path
+* Start local webserver on port 8080 using http-server
 * Type `mocha` to run the tests

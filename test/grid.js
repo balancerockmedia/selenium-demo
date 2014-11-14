@@ -25,7 +25,7 @@ describe('Grid Tests', function() {
 
     it('should load initial grid', function(done) {
         client
-            .url('http://127.0.0.1/~djohn3/selenium-demo/grid.html')
+            .url('http://localhost:8080/grid.html')
 
             .getTitle(function(err, title) {
                 assert.equal(title, 'Grid');
@@ -54,7 +54,7 @@ describe('Grid Tests', function() {
 
     it('should refresh grid', function(done) {
         client
-            .url('http://127.0.0.1/~djohn3/selenium-demo/grid.html')
+            .url('http://localhost:8080/grid.html')
 
             .getTitle(function(err, title) {
                 assert.equal(title, 'Grid');

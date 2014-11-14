@@ -25,7 +25,7 @@ describe('Navigation', function() {
 
     it('should navigate from forms page to grid page and then back again', function(done) {
         client
-            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
+            .url('http://localhost:8080/forms.html')
 
             .saveScreenshot('forms_page.png')
 

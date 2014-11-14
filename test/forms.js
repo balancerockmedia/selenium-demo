@@ -25,7 +25,7 @@ describe('Forms Page', function() {
 
     it('name form should set displayName field', function(done) {
         client
-            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
+            .url('http://localhost:8080/forms.html')
  
             .setValue('#nameForm input[name="firstName"]', 'Dan')
             .getValue('#nameForm input[name="firstName"]', function(err, value) {
@@ -48,7 +48,7 @@ describe('Forms Page', function() {
 
     it('color form should set displayColor field', function(done) {
         client
-            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
+            .url('http://localhost:8080/forms.html')
 
             .selectByValue('[name="color"]', 'red')
 
@@ -63,7 +63,7 @@ describe('Forms Page', function() {
 
     it('should not allow contact form to be submitted with blank email', function(done) {
         client
-            .url('http://127.0.0.1/~djohn3/selenium-demo/forms.html')
+            .url('http://localhost:8080/forms.html')
 
             // submit empty form
             .submitForm('#contactForm')
